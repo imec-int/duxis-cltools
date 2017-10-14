@@ -1,0 +1,9 @@
+service: back-a
+cargoApp: true
+cargoFrontend: false
+watchable: true
+unitTests:
+  enable: true
+  service: test-back-a
+  dependencies:
+    - test-back-a-store

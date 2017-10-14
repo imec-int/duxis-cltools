@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  back-a:
+    build:
+      context: ./images/back-a
+  back-b:
+    build:
+      context: ./images/back-b
+  back-c:
+    build:
+      context: ./images/back-c
+  front-a:
+    build:
+      context: ./images/front-a
+  front-b:
+    build:
+      context: ./images/front-b
+  ext-a:
+    image: postgres:9-alpine

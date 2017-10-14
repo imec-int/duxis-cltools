@@ -1,0 +1,6 @@
+service: back-c
+cargoApp: true
+cargoFrontend: false
+watchable: true
+unitTests:
+  enable: false

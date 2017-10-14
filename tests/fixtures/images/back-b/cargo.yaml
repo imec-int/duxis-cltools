@@ -1,0 +1,7 @@
+service: back-b
+cargoApp: true
+cargoFrontend: false
+watchable: false
+unitTests:
+  enable: true
+  service: test-back-b

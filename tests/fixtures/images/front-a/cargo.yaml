@@ -1,0 +1,6 @@
+service: front-a
+cargoApp: false
+cargoFrontend: true
+watchable: true
+unitTests:
+  enable: false

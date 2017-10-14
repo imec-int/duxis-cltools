@@ -1,0 +1,38 @@
+{
+  "name": "@imec-apt/duxis-cltools",
+  "version": "0.1.0",
+  "description": "Duxis project command line development tools.",
+  "bin": {
+    "dx": "./dx.sh"
+  },
+  "scripts": {
+    "install": "bash install/completion.sh",
+    "test": "mocha --bail --recursive tests",
+    "test-watch": "nodemon --watch js --watch tests --ext js,jsx,json,yml --exec 'mocha --bail --recursive tests'"
+  },
+  "dependencies": {
+    "commander": "2.11.0",
+    "fs-extra": "4.0.2",
+    "js-yaml": "3.10.0",
+    "lodash": "4.17.4",
+    "npm-check": "5.4.5"
+  },
+  "devDependencies": {
+    "chai": "4.1.2"
+  },
+  "engines": {
+    "node": ">=8.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imec-apt/duxis-cltools"
+  },
+  "keywords": [
+    "duxis",
+    "apt",
+    "imec",
+    "cli"
+  ],
+  "author": "wouter.vandenbroeck@imec.be",
+  "license": "UNLICENSED"
+}
