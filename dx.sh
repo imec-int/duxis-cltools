@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# avoid 'unresolved variable' warnings in Webstorm:
+# Avoid 'unresolved variable' warnings in Webstorm:
 export COMPOSE_FILE
 export COMPOSE_PROJECT_NAME
 export DX_ENV
@@ -13,6 +13,16 @@ export LOG_ENVIRONMENT
 export NODE_ENV
 export PROJECT_NAME
 export PROJECT_VERSION
+
+# Get the directory of this script:
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+JS_DIR="${DIR}/js"
 
 # --------------------------------------------------------------------------------------------------
 
@@ -46,7 +56,7 @@ build () {
   printf "\nCreating Dockerfiles for v${PROJECT_VERSION} in ${DX_ENV} mode:\n"
   find . -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
-  node scripts/copyProjectSetup.js  // copy the project setup directory in the build contexts
+  node ${JS_DIR}/copyProjectSetup.js  // copy the project setup directory in the build contexts
 
   if [ -z "${SERVICES}" ]
   then
@@ -63,7 +73,7 @@ build () {
     docker-compose build "${SERVICES[@]}"
   fi
 
-  node scripts/copyProjectSetup.js --clean  // remove the project setup directories in the build contexts
+  node ${JS_DIR}/copyProjectSetup.js --clean  // remove the project setup directories in the build contexts
 
   # Write the current environment to the `.build-env` file:
   echo "${DX_ENV}" > ${DX_BUILD_ENV_FILE}
@@ -125,7 +135,7 @@ clean () {
 }
 
 clean_services () {
-  local SERVICES="$(scripts/getServiceNames.js)"
+  local SERVICES="$(${JS_DIR}/getServiceNames.js)"
   IFS=' ' read -r -a SERVICES <<< "$SERVICES"
 
   echo "Remove containers and images..."
@@ -135,7 +145,7 @@ clean_services () {
     docker rmi -f "${COMPOSE_PROJECT_NAME}_${SERVICE}" 2> /dev/null
   done
 
-  local NETWORKS="$(scripts/getNetworkNames.js --prepend)"
+  local NETWORKS="$(${JS_DIR}/getNetworkNames.js --prepend)"
   echo "Remove networks ${NETWORKS}..."
   docker network rm ${NETWORKS} 2> /dev/null
 }
@@ -144,7 +154,7 @@ clean_tests () {
   set_env test
 
   echo "Remove test containers and images..."
-  local SERVICES="$(scripts/getServiceNames.js)"
+  local SERVICES="$(${JS_DIR}/getServiceNames.js)"
   IFS=' ' read -r -a SERVICES <<< $SERVICES
   for SERVICE in "${SERVICES[@]}"
   do
@@ -152,11 +162,11 @@ clean_tests () {
     docker rmi -f "${COMPOSE_PROJECT_NAME}_${SERVICE}" 2> /dev/null
   done
 
-  local NETWORKS="$(scripts/getNetworkNames.js --prepend)"
+  local NETWORKS="$(${JS_DIR}/getNetworkNames.js --prepend)"
   echo "Remove networks ${NETWORKS}..."
   docker network rm ${NETWORKS} 2> /dev/null
 
-  local VOLUMES="$(scripts/getTestVolumeNames.js)"
+  local VOLUMES="$(${JS_DIR}/getTestVolumeNames.js)"
   IFS=' ' read -r -a VOLUMES <<< $VOLUMES
   for NAME in "${VOLUMES[@]}"
   do
@@ -274,8 +284,8 @@ test_services () {
 
   if [ -z "${SERVICE}" ]
   then
-    local SERVICES="$(scripts/getServiceNames.js --composefile dc.prod.yml --testable)"
-    #echo "Test all: $(scripts/getServiceNames.js --composefile dc.prod.yml --testable)"
+    local SERVICES="$(${JS_DIR}/getServiceNames.js --composefile dc.prod.yml --testable)"
+    #echo "Test all: $(${JS_DIR}/getServiceNames.js --composefile dc.prod.yml --testable)"
     IFS=' ' read -r -a SERVICES <<< $SERVICES
     for I_ALL in ${!SERVICES[@]}
     do test_service 0 ${SERVICES[I_ALL]}
@@ -289,7 +299,7 @@ test_service () {
   export WATCH_TESTS=${1} # must be exported
   local SERVICE=${2}
   export TEST_SUBJECT="test-${SERVICE}" # must be exported
-  local SERVICES="$(scripts/getServiceNames.js --test ${SERVICE})"
+  local SERVICES="$(${JS_DIR}/getServiceNames.js --test ${SERVICE})"
   local CONTAINER="${COMPOSE_PROJECT_NAME}_${TEST_SUBJECT}_1"
 
   # Stop services:
@@ -403,7 +413,7 @@ watch_service () {
     exit 3
   fi
 
-  local WATCHABLE=$(scripts/watchable.js ${SERVICE})
+  local WATCHABLE=$(${JS_DIR}/watchable.js ${SERVICE})
   if [ ${WATCHABLE} == 0 ]
   then
     printerr "The '${SERVICE}' service is not watchable."
@@ -538,7 +548,7 @@ case ${ACTION} in
   help)         echo "${USAGE_LINE}";;
   inspect)      inspect_service ${@:2};;
   log)          log_services ${@:2};;
-  outdated)     scripts/outdated.js .;;
+  outdated)     ${JS_DIR}/outdated.js .;;
   restart)      restart_services ${@:2};;
   stop)         stop_services ${@:2};;
   test)         test_services ${@:2};;

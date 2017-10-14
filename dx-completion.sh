@@ -5,11 +5,11 @@
 cd "$(dirname ${BASH_SOURCE[0]})"
 
 all_services () {
-  echo "$(js/getServiceNames.js)"
+  echo "$($(dirname ${BASH_SOURCE[0]})/js/getServiceNames.js --composefile dc.prod.yml)"
 }
 
 testable_services () {
-  echo "$(js/getServiceNames.js --composefile dc.prod.yml --testable)"
+  echo "$($(dirname ${BASH_SOURCE[0]})/js/getServiceNames.js --composefile dc.prod.yml --testable)"
 }
 
 available_services () {

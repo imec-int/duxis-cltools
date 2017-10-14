@@ -10,6 +10,7 @@ Install the cltools globally:
 npm install -g duxis-cltools
 ```
 
+Or add the cltools in the dependencies of the `package.json` file in your Duxis project.
 
 
 ## Auto-Completion
