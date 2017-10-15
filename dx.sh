@@ -54,7 +54,7 @@ build () {
   fi
 
   printf "\nCreating Dockerfiles for v${PROJECT_VERSION} in ${DX_ENV} mode:\n"
-  find . -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
+  find ./images/ -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
   node ${JS_DIR}/copyProjectSetup.js  // copy the project setup directory in the build contexts
 
