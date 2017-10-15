@@ -31,12 +31,6 @@ Pull requests that add support for other platforms are more than welcome!
 
 ## Test the cltools
 
-Install [Mocha][]:
-
-```bash
-npm install -g mocha
-```
-
 Run the tests once:
 
 ```bash

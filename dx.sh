@@ -499,7 +499,7 @@ set -o allexport
 if [ -f .env ]
 then source ./.env
 else
-  printerr "The '.env' file is missing, please run './install.sh'."
+  printerr "The '.env' file is missing, please run 'npm install'."
   exit 1
 fi
 set +o allexport

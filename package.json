@@ -1,14 +1,14 @@
 {
   "name": "@imec-apt/duxis-cltools",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Duxis project command line development tools.",
   "bin": {
     "dx": "./dx.sh"
   },
   "scripts": {
-    "install": "bash install/completion.sh",
+    "install": "bash scripts/install-completion.sh",
     "test": "mocha --bail --recursive tests",
-    "test-watch": "nodemon --watch js --watch tests --ext js,jsx,json,yml --exec 'mocha --bail --recursive tests'"
+    "test-watch": "bash scripts/test-watch.sh"
   },
   "dependencies": {
     "commander": "2.11.0",
@@ -18,7 +18,9 @@
     "npm-check": "5.4.5"
   },
   "devDependencies": {
-    "chai": "4.1.2"
+    "chai": "4.1.2",
+    "mocha": "4.0.1",
+    "nodemon": "1.12.1"
   },
   "engines": {
     "node": ">=8.6.0"
