@@ -22,8 +22,16 @@ dx help
 
 ## Auto-Completion
 
-Auto-completion for the `dx` command is installed on MacOS and Linux.
+Auto-completion for the `dx` command is or can be installed on MacOS and Linux.
+
 For MacOS, auto-completion support assumes that you installed _bash auto-completion_ as instructed in this [how-to article](https://iminds.atlassian.net/wiki/spaces/developers/pages/83132417).
+
+For Linux, move `tmp_bash_completion.d/dx` to `/etc/bash_completion.d/dx`:
+
+```bash
+sudo mv tmp_bash_completion.d/dx /etc/bash_completion.d/dx
+```
+
 Pull requests that add support for other platforms are more than welcome!
 
 
