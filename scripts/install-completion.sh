@@ -9,7 +9,10 @@ NC='\033[0m' # No Color
 
 case $(uname -s) in
   Darwin)
-    ./scripts/install-completion.mac.sh
+    ./scripts/install-completion.darwin.sh
+    ;;
+  Linux)
+    ./scripts/install-completion.linux.sh
     ;;
   *)
     printf "${RED}Installation of dx auto-completion is not yet supported on '$(uname -s)'${NC}. We welcome PRs!\n"
