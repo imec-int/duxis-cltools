@@ -224,7 +224,7 @@ inspect_service () {
 
 # --------------------------------------------------------------------------------------------------
 
-log_services () {
+logs () {
   if [ -e "$(current_build_env)" ]
   then
     printerr "Please first build the project."
@@ -545,7 +545,7 @@ case ${ACTION} in
   down)         down_project;;
   help)         echo "${USAGE_LINE}";;
   inspect)      inspect_service ${@:2};;
-  log)          log_services ${@:2};;
+  logs)         logs ${@:2};;
   outdated)     ${JS_DIR}/outdated.js .;;
   restart)      restart_services ${@:2};;
   stop)         stop_services ${@:2};;
