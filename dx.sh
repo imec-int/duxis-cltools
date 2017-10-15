@@ -62,8 +62,9 @@ build () {
   then
     printf "\nBuilding ${PROJECT_NAME} ${PROJECT_VERSION} in ${DX_ENV} mode:\n"
     if [ ${DX_ENV} != dxdev ]
+    then
       pull_dxf_images
-      then docker-compose pull
+      docker-compose pull
     fi
     pull_ext_images
     docker-compose build
@@ -242,10 +243,7 @@ restart_services () {
     exit 1
   fi
 
-  if [ "${1}" == "--dev" ]
-  then stop_services "${@:2}"
-  else stop_services "${@}"
-  fi
+  stop_services "${@}"
   up_services "${@}"
 }
 
@@ -344,7 +342,7 @@ up_services () {
 
   # Define signal handlers:
   up_on_sigint () {
-    echo "[dx - up_on_sigint]"
+    #echo "[dx - up_on_sigint]"
     if [ -z "${SERVICES}" ]
     then docker-compose stop
     else docker-compose stop "${SERVICES[@]}"
@@ -352,7 +350,7 @@ up_services () {
     exit
   }
   up_on_sigterm () {
-    echo "[dx - up_on_sigterm]"
+    #echo "[dx - up_on_sigterm]"
     if [ -z "${SERVICES}" ]
     then docker-compose stop
     else docker-compose stop "${SERVICES[@]}"

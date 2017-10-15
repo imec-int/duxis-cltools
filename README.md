@@ -12,6 +12,13 @@ npm install -g duxis-cltools
 
 Or add the cltools in the dependencies of the `package.json` file in your Duxis project.
 
+Cd in your Duxis project root and learn more about the `dx` commands with:
+
+```bash
+dx help
+```
+
+
 
 ## Auto-Completion
 
