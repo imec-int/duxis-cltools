@@ -39,7 +39,7 @@ available_services () {
 _dx_completion () {
   COMPREPLY=()
 
-  local ACTIONS=("build" "clean" "down" "help" "inspect" "log" "outdated" "restart" "stop" "test" "up" "watch")
+  local ACTIONS=("build" "clean" "down" "help" "inspect" "logs" "outdated" "restart" "stop" "test" "up" "watch")
 
   local CUR=${COMP_WORDS[COMP_CWORD]}  # current word being autocompleted
 
@@ -70,8 +70,8 @@ _dx_completion () {
     then COMPREPLY=( `compgen -W "$(all_services)" -- ${CUR}` )
     fi
 
-  # cases: `log` or `restart` or `up`
-  elif [ ${COMP_WORDS[1]} == "log" ] || [ ${COMP_WORDS[1]} == "restart" ] || [ ${COMP_WORDS[1]} == "up" ]
+  # cases: `logs` or `restart` or `up`
+  elif [ ${COMP_WORDS[1]} == "logs" ] || [ ${COMP_WORDS[1]} == "restart" ] || [ ${COMP_WORDS[1]} == "up" ]
   then
     if (( ${COMP_CWORD} == 2 ))
     then COMPREPLY=( `compgen -W "$(all_services)" -- ${CUR}` )
