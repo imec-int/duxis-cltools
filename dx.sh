@@ -117,7 +117,7 @@ build_docker_file () {
   then PREFIX=""
   else PREFIX="hub.duxis.io\/"
   fi
-  sed -E "s/FROM (cargo|dxf)-(.*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/" ${SOURCE} > ${TARGET}
+  sed -E "s/FROM (cargo|dxf|duxis)-(.*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/" ${SOURCE} > ${TARGET}
   echo "Wrote ${TARGET}"
 }
 export -f build_docker_file
