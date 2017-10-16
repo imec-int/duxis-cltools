@@ -4,13 +4,19 @@ Duxis project command line development tools.
 
 ## Instructions
 
-Install the cltools globally:
+Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis project:
 
-```bash
-npm install -g duxis-cltools
+```json
+{
+  "name": "my-duxis-project",
+  "version": "0.1.0",
+  "dx_version": "0.23.0",
+  "dependencies": {
+    "@imec-apt/duxis-cltools": "0.2.7"
+  },
+  ...
+}
 ```
-
-Or add the cltools in the dependencies of the `package.json` file in your Duxis project.
 
 Cd in your Duxis project root and learn more about the `dx` commands with:
 

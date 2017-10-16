@@ -81,21 +81,29 @@ build () {
 }
 
 pull_ext_images () {
-  IFS=' ' read -r -a IMAGES <<< "$EXT_IMAGES"
-  for IMAGE in "${IMAGES[@]}"
-  do
-    printf "\nPulling ${IMAGE}\n"
-    docker pull "${IMAGE}"
-  done
+  if [ "${EXT_IMAGES}" ]
+  then
+    IFS=' ' read -r -a IMAGES <<< "$EXT_IMAGES"
+    for IMAGE in "${IMAGES[@]}"
+    do
+      printf "\nPulling ${IMAGE}\n"
+      docker pull "${IMAGE}"
+    done
+    printf "\n"
+  fi
 }
 
 pull_dxf_images () {
-  IFS=' ' read -r -a IMAGES <<< "$DXF_IMAGES"
-  for IMAGE in "${IMAGES[@]}"
-  do
-    printf "\nPulling ${DX_HUB}${IMAGE}:${DX_VERSION}\n"
-    docker pull "${DX_HUB}${IMAGE}:${DX_VERSION}"
-  done
+  if [ "${DXF_IMAGES}" ]
+  then
+    IFS=' ' read -r -a IMAGES <<< "$DXF_IMAGES"
+    for IMAGE in "${IMAGES[@]}"
+    do
+      printf "\nPulling ${DX_HUB}${IMAGE}:${DX_VERSION}\n"
+      docker pull "${DX_HUB}${IMAGE}:${DX_VERSION}"
+    done
+    printf "\n"
+  fi
 }
 
 build_test_services () {
