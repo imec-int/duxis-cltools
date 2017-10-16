@@ -29,7 +29,13 @@ For MacOS, auto-completion support assumes that you installed _bash auto-complet
 For Linux, move `tmp_bash_completion.d/dx` to `/etc/bash_completion.d/dx`:
 
 ```bash
-sudo mv tmp_bash_completion.d/dx /etc/bash_completion.d/dx
+sudo mv <path-to-package>/tmp_bash_completion.d/dx /etc/bash_completion.d/dx
+```
+
+e.g.:
+
+```bash
+sudo mv node_modules/@imec-apt/duxis-cltools/tmp_bash_completion.d/dx /etc/bash_completion.d/dx
 ```
 
 Pull requests that add support for other platforms are more than welcome!
@@ -52,4 +58,26 @@ npm run test-watch
 
 
 
+## Manual
+
+The _duxis-cltools_ provides the command line utility `dx`, which facilitates the development, testing and deployment of _Duxis_ projects.
+
+### Duxis Project Requirements
+
+The following files and directories are required (or optional) in a Duxis project.
+
+| Path | Purpose |
+|:---- |:------- |
+| `.env` | Provides default values for (most of) the environment variables. Some additional variables are set by the `dx` cli. |
+| `dc.base.yml` | Optional [Docker Compose][] file that typically provides the common configation, and is extended in the environment-specific compose files. |
+| `dc.dev.yml` | The [Docker Compose][] file that provides the development-specific configation. |
+| `dc.dxdev.yml` | Optional [Docker Compose][] file that provides the extended Duxis-development configation. |
+| `dc.prod.yml` | The [Docker Compose][] file that provides the production-specific configation. |
+| `dc.test.yml` | The [Docker Compose][] file that provides the test configation. |
+| ... | (TODO) |
+
+
+
+
+[Docker Compose]: https://docs.docker.com/compose/
 [Mocha]: https://mochajs.org
