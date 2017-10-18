@@ -2,6 +2,11 @@
 
 Duxis project command line development tools.
 
+See also:
+
+- [Changelog](CHANGELOG.md)
+
+
 ## Instructions
 
 Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis project:
@@ -13,8 +18,7 @@ Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis
   "dx_version": "0.23.0",
   "dependencies": {
     "@imec-apt/duxis-cltools": "0.2.7"
-  },
-  ...
+  }
 }
 ```
 
