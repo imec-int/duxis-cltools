@@ -266,7 +266,9 @@ stop_services () {
 
   if [ -z "${SERVICE}" ]
   then
-    docker-compose -f dc.test.yml stop
+    if [ -f dc.test.yml ]
+    then docker-compose -f dc.test.yml stop
+    fi
     docker-compose -f dc.prod.yml stop
   else
     set_env $(current_build_env)

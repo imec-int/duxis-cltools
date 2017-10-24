@@ -1,6 +1,6 @@
 {
   "name": "@imec-apt/duxis-cltools",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Duxis project command line development tools.",
   "bin": {
     "dx": "./dx.sh"
