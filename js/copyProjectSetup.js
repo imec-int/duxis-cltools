@@ -1,7 +1,8 @@
 #!/usr/bin/env node --harmony
+
 'use strict';
 
-const { join, resolve } = require('path');
+const { resolve } = require('path');
 
 const program = require('commander');
 
@@ -23,13 +24,28 @@ const COMPOSE_FILE = process.env.COMPOSE_FILE || PROD_COMPOSE_FILE;
  *
  * @returns {Promise.<string[]>}
  */
-async function copyProjectSetup({ clean, composefile }) {
-  // console.log('>> copyProjectSetup - ', { clean, composefile });
+async function copyProjectSetup({ args: serviceNames, clean, composefile }) {
+  // console.log('>> copyProjectSetup - ', { clean, composefile, serviceNames });
   const services = await getServiceSpecs(resolve(composefile));
   if (clean) {
     await asyncForIn(services, async (serviceSpec) => {
       if (serviceSpec.build && serviceSpec.build.context) {
         await rmrf(resolve(serviceSpec.build.context, '__project_setup__')); //.catch(() => null);
+      }
+    });
+  }
+  else if (serviceNames.length > 0) {
+    await asyncForIn(serviceNames, async (serviceName) => {
+      const serviceSpec = services[serviceName];
+      if (serviceSpec) {
+        if (serviceSpec.build && serviceSpec.build.context) {
+          await copy('setup', resolve(serviceSpec.build.context, '__project_setup__'), {
+            preserveTimestamps: true
+          }); //.catch(() => null);
+        }
+      }
+      else {
+        throw new Error(`There is no '${serviceName}' service.`);
       }
     });
   }
@@ -48,6 +64,7 @@ async function copyProjectSetup({ clean, composefile }) {
 
 program
   .version('0.1.0')
+  .usage('[options] <service ...>')
   .option('--clean', `Remove the temporary copies.`)
   .option('--composefile [path]', `Specify the Compose file to use [${COMPOSE_FILE}].`, COMPOSE_FILE)
   .parse(process.argv);

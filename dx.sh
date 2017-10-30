@@ -56,8 +56,6 @@ build () {
   printf "\nCreating Dockerfiles for v${PROJECT_VERSION} in ${DX_ENV} mode:\n"
   find ./images/ -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
-  node ${JS_DIR}/copyProjectSetup.js  // copy the project setup directory in the build contexts
-
   if [ -z "${SERVICES}" ]
   then
     printf "\nBuilding ${PROJECT_NAME} ${PROJECT_VERSION} in ${DX_ENV} mode:\n"
@@ -67,14 +65,16 @@ build () {
       docker-compose pull
     fi
     pull_ext_images
+    node ${JS_DIR}/copyProjectSetup.js
     docker-compose build
+    node ${JS_DIR}/copyProjectSetup.js --clean
   else
     printf "\nBuilding ${SERVICES[@]} in ${DX_ENV} mode:\n"
     if [ ${DX_ENV} != dxdev ]; then docker-compose pull "${SERVICES[@]}"; fi
+    node ${JS_DIR}/copyProjectSetup.js "${SERVICES[@]}"
     docker-compose build "${SERVICES[@]}"
+    node ${JS_DIR}/copyProjectSetup.js --clean
   fi
-
-  node ${JS_DIR}/copyProjectSetup.js --clean  // remove the project setup directories in the build contexts
 
   # Write the current environment to the `.build-env` file:
   echo "${DX_ENV}" > ${DX_BUILD_ENV_FILE}
@@ -112,7 +112,9 @@ build_test_services () {
 
   printf "\nBuild test images:\n"
   set_env test
+  node ${JS_DIR}/copyProjectSetup.js
   docker-compose build --pull
+  node ${JS_DIR}/copyProjectSetup.js --clean
 
   # Write the current environment to the `.build-env` file:
   echo "${DX_ENV}" > ${DX_BUILD_ENV_FILE}

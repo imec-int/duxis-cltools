@@ -1,11 +1,10 @@
 'use strict';
 
 const { resolve } = require('path');
-const util = require('util');
-const execFile = util.promisify(require('child_process').execFile);
-const process = require('process');
 
 const chai = require('chai');
+
+const { execFile } = require('../js/utils');
 
 const assert = chai.assert;
 
@@ -19,7 +18,7 @@ describe('getServiceNames', function () {
     const { stdout, stderr } = await execFile(resolve(__dirname, '../js/getServiceNames.js'),
       args,
       {
-        cwd: resolve(__dirname, 'fixtures'),
+        cwd: resolve(__dirname, 'fixtures/project-a'),
         env: {
           ...process.env,
           COMPOSE_FILE: 'dc.01.yml'

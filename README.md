@@ -63,7 +63,7 @@ npm test
 Or run the tests in watch-mode:
 
 ```bash
-npm run test-watch
+npm run test:watch
 ```
 
 

@@ -1,5 +1,6 @@
 'use strict';
 
+const child_process = require('child_process');
 const fs = require('fs');
 const { resolve } = require('path');
 const { promisify } = require('util');
@@ -204,18 +205,19 @@ const readYaml = async (path) => {
 };
 exports.readYaml = readYaml;
 
-const writeYaml = async (path, data, options) => {
+exports.writeYaml = async (path, data, options) => {
   return await writeFile(path, yaml.safeDump(data, options));
 };
-exports.writeYaml = writeYaml;
+
+// -- Promisified Node.js util functions --------------- --- --  -
+
+exports.execFile = promisify(child_process.execFile);
 
 // -- Promisified Node.js fs functions --------------- --- --  -
 
-const copyFile = promisify(fs.copyFile);
-exports.copyFile = copyFile;
+exports.copyFile = promisify(fs.copyFile);
 
-const readDir = promisify(fs.readdir);
-exports.readDir = readDir;
+exports.readDir = promisify(fs.readdir);
 
 const readFile = promisify(fs.readFile);
 exports.readFile = readFile;
@@ -226,34 +228,24 @@ exports.stat = stat;
 const writeFile = promisify(fs.writeFile);
 exports.writeFile = writeFile;
 
-// -- Promisified fs-extra functions --------------- --- --  -
+// -- fs-extra functions --------------- --- --  -
 
-const copy = fse.copy;
-exports.copy = copy;
-
-const ensureDir = fse.ensureDir;
-exports.ensureDir = ensureDir;
-
-const exists = fse.exists;
-exports.exists = exists;
-
-const readJson = fse.readJson;
-exports.readJson = readJson;
-
-const rmrf = fse.remove;
-exports.rmrf = rmrf;
+exports.copy = fse.copy;
+exports.ensureDir = fse.ensureDir;
+exports.exists = fse.exists;
+exports.readJson = fse.readJson;
+exports.rmrf = fse.remove;
 
 // -- New --------------- --- --  -
 
-const hasDuxisManifest = async (imagePath) => {
+exports.hasDuxisManifest = async (imagePath) => {
   if (await isDirectory(imagePath)) {
     const cargoPath = resolve(imagePath, 'cargo.yaml');
     return await isFile(cargoPath);
   }
 };
-exports.hasDuxisManifest = hasDuxisManifest;
 
-const readDuxisManifest = async (imagePath) => {
+exports.readDuxisManifest = async (imagePath) => {
   if (await isDirectory(imagePath)) {
     const cargoPath = resolve(imagePath, 'cargo.yaml');
     if (await isFile(cargoPath)) {
@@ -261,4 +253,3 @@ const readDuxisManifest = async (imagePath) => {
     }
   }
 };
-exports.readDuxisManifest = readDuxisManifest;

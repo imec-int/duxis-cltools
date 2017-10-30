@@ -1,0 +1,5 @@
+{
+  "exec": "mocha --bail --recursive tests",
+  "ignore": ["node_modules", "tests/fixtures/**/__project_setup__"],
+  "verbose": true
+}
