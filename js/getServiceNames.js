@@ -1,5 +1,7 @@
 #!/usr/bin/env node --harmony
 
+'use strict';
+
 const { resolve } = require('path');
 
 const program = require('commander');
@@ -27,9 +29,12 @@ const COMPOSE_FILE = process.env.COMPOSE_FILE || 'docker-composer.yml';
 const getServiceNames = async ({ composefile, front, test, testable, watchable }) => {
   if (test) {
     const services = await getServiceSpecs(resolve(composefile));
-    const service = services[test];
+    let service = services[test];
     if (!service) {
-      throw new Error(`There is no '${test}' service.`);
+      service = services[`test-${test}`];
+      if (!service) {
+        throw new Error(`There is no '${test}' or 'test-${test}' service.`);
+      }
     }
     let names = [`test-${test}`];
     const hasUnitTests = service.manifest && service.manifest.unitTests && service.manifest.unitTests.enable;
@@ -59,12 +64,14 @@ const getServiceNames = async ({ composefile, front, test, testable, watchable }
     }
 
     if (testable) {
-      names = names.filter((name) => {
-        return services[name] &&
-          services[name].manifest &&
-          services[name].manifest.unitTests &&
-          services[name].manifest.unitTests.enable;
-      });
+      names = names
+        .filter((name) => {
+          return services[name] &&
+            services[name].manifest &&
+            services[name].manifest.unitTests &&
+            services[name].manifest.unitTests.enable;
+        })
+        .map((name) => services[name].manifest.service)
     }
 
     return names;

@@ -1,5 +1,7 @@
 #!/usr/bin/env node --harmony
 
+'use strict';
+
 const { resolve } = require('path');
 
 const program = require('commander');

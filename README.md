@@ -7,7 +7,7 @@ See also:
 - [Changelog](CHANGELOG.md)
 
 
-## Instructions
+## Using the _cltools_ in your Duxis Project
 
 Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis project:
 
@@ -25,12 +25,12 @@ Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis
 Cd in your Duxis project root and learn more about the `dx` commands with:
 
 ```bash
-dx help
+./dx help
 ```
 
 
 
-## Auto-Completion
+## Installing Auto-Completion
 
 Auto-completion for the `dx` command is or can be installed on MacOS and Linux.
 
@@ -72,7 +72,59 @@ npm run test:watch
 
 The _duxis-cltools_ provides the command line utility `dx`, which facilitates the development, testing and deployment of _Duxis_ projects.
 
-### Duxis Project Requirements
+To develop, test or deploy a Duxis project, you first need to build the project with the `dx build` command.
+You can build in one of the four following modes.
+The _DX\_ENV_ columns shows the value for the `DX_ENV` environment variable in 
+
+| Command | Mode | DX_ENV | Description |
+| ------- |:----:|:------:| ----------- |
+| `./dx build` | Production | `prod` | The default mode for deployment. |
+| `./dx build --test` | Test | `test` | To be used for running the tests. |
+| `./dx build --dev` | Development | `dev` | The standard development mode. |
+| `./dx build --dxdev` | Duxis-development | `dxdev` | To be used when co-developing Duxis Foundation. <sup>(1)</sup> |
+
+<small><ol><li>Note that to use the _Duxis-development_ mode, the `DXF_PATH` environment variable in your `.env` file should be properly configured.</li></ol></small>
+
+Once you've built in one of these modes, you can use the other commands, depending on the mode, as shown in the following table:
+
+| Command | prod | test | dev | dxdev | Description |
+| ------- |:---:|:---:|:---:|:---:| ----------- |
+| `./dx up` |X||X|X| Start the services. |
+| `./dx test` ||X||| Run the tests. |
+| `./dx inspect` |X||X|X| Inspect a service. |
+| `./dx logs` |X|||| Print the logs. |
+| `./dx stop` |X||X|X| Stop the services. |
+| `./dx down` |X||X|X| Stops containers and removes containers, networks, volumes and images created when running `./dx up` (or `./dx test`). |
+| `./dx restart` |X||X|X| Stop and restart the services. |
+| `./dx clean` |X|X|X|X| Remove all images, containers, etc. |
+| `./dx clean --test` ||X||| Remove only test images, test containers, test volumes, etc. |
+
+You can also use certain commands on one (or several) services, as shown in the following examples:
+
+| Command | Description |
+| ------- | ----------- |
+| `./dx build foo` | Build the service _foo_ in prodution mode. <sup>(1)</sup> |
+| `./dx build foo bar` | Build the services _foo_ and _bar_ in prodution mode. <sup>(1)</sup> |
+| `./dx build --dev foo` | Build the service _foo_ in development mode. <sup>(1)</sup> |
+| `./dx up foo bar` | Start the services _foo_ and _bar_. |
+| `./dx restart foo bar` | Start the services _foo_ and _bar_. |
+| `./dx logs foo` | Print the logs for the service _foo_. |
+| `./dx stop foo bar` | Stop the services _foo_ and _bar_. |
+
+<small><ol><li>Individual services should be built in the same mode as the last project build.</li></ol></small>
+
+Some commands can only be used on a single service:
+
+| Command | Description |
+| ------- | ----------- |
+| `./dx inspect foo` | Inspect the service _foo_ (after it has been started). |
+| `./dx watch foo` | Start the service _foo_ in _watch-mode_. |
+| `./dx test --watch foo` | Test the _foo_ service in _watch-mode_. |
+
+
+## Duxis Project Requirements
+
+> This section is under construction...
 
 The following files and directories are required (or optional) in a Duxis project.
 
@@ -85,6 +137,16 @@ The following files and directories are required (or optional) in a Duxis projec
 | `dc.prod.yml` | The [Docker Compose][] file that provides the production-specific configation. |
 | `dc.test.yml` | The [Docker Compose][] file that provides the test configation. |
 | ... | (TODO) |
+
+
+The following table shows the values for the `NODE_ENV` and `DX_ENV` environment variables for each of the standard Duxis project modes.
+
+| Mode | NODE_ENV | DX_ENV |
+| ---- |:--------:|:------:|
+| Production | `prod` |
+| Test | `test` |
+| Development | `dev` |
+| Duxis-Development | `dxdev` |
 
 
 

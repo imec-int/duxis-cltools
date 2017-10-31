@@ -19,8 +19,7 @@ module.exports = async (path = process.env.COMPOSE_FILE) => {
   const composeFile = await readComposeFile(path, { includeXFields: true });
   const services = {};
   await asyncForEach(Object.keys(composeFile.services), async (serviceName) => {
-    const service = composeFile.services[serviceName];
-    services[serviceName] = service;
+    const service = services[serviceName] = composeFile.services[serviceName];
 
     // Add manifest when provided:
     if (service.build && service.build.context) {

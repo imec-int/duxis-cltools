@@ -1,0 +1,6 @@
+service: store-a
+cargoApp: false
+cargoFrontend: false
+watchable: false
+unitTests:
+  enable: false

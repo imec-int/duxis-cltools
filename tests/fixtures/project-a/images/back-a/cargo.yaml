@@ -6,4 +6,4 @@ unitTests:
   enable: true
   service: test-back-a
   dependencies:
-    - test-back-a-store
+    - test-store-a

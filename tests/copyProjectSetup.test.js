@@ -4,25 +4,33 @@ const { resolve } = require('path');
 
 const chai = require('chai');
 
-const { asyncMap, execFile, exists, isDirectory, readDir, readFile } = require('../js/utils');
-
-const assert = chai.assert;
+const { asyncForEach, asyncMap, execFile, exists, isDirectory, readDir, readFile } = require('../js/utils');
 
 describe('copyProjectSetup', function () {
-  const copyProjectSetup = resolve(__dirname, '../js/copyProjectSetup.js');
+  const assert = chai.assert;
+  const copyProjectSetupPath = resolve(__dirname, '../js/copyProjectSetup.js');
   const projectDir = resolve(__dirname, '../tests/fixtures/project-a');
   const imagesDir = resolve(projectDir, 'images');
+  let configContent;
 
-  const removeCopies = async () => {
-    const { stdout, stderr } = await execFile(copyProjectSetup, ['--clean'], {
+  before(async () => {
+    configContent = await readFile(resolve(projectDir, 'setup/config.js'));
+  });
+
+  const copyProjectSetup = async (args = []) => {
+    const { stdout, stderr } = await execFile(copyProjectSetupPath, args, {
       cwd: projectDir,
-      env: { ...process.env, COMPOSE_FILE: 'dc.01.yml' }
+      env: { ...process.env, COMPOSE_FILE: 'dc.prod.yml' }
     });
     if (stderr) {
       console.error('  - stdout:', stdout);
       throw new Error(stderr);
     }
+    return stdout;
+  };
 
+  const removeCopies = async () => {
+    await copyProjectSetup(['--clean']);
     await asyncMap(readDir(imagesDir), async (file) => {
       const setupDir = resolve(imagesDir, file, '__project_setup__');
       assert.isFalse(await exists(setupDir));
@@ -30,17 +38,9 @@ describe('copyProjectSetup', function () {
   };
 
   it('copy setup', async () => {
-    const { stdout, stderr } = await execFile(copyProjectSetup, [], {
-      cwd: projectDir,
-      env: { ...process.env, COMPOSE_FILE: 'dc.01.yml' }
-    });
-    if (stderr) {
-      console.error('  - stdout:', stdout);
-      throw new Error(stderr);
-    }
-
-    const configContent = await readFile(resolve(projectDir, 'setup/config.js'));
-    await asyncMap(readDir(imagesDir), async (file) => {
+    await copyProjectSetup();
+    const services = ['back-a', 'back-b', 'back-c', 'front-a', 'front-b'];
+    await asyncForEach(services, async (file) => {
       const imageDir = resolve(imagesDir, file);
       assert.isTrue(await isDirectory(imageDir));
       const setupDir = resolve(imageDir, '__project_setup__');
@@ -54,23 +54,13 @@ describe('copyProjectSetup', function () {
   it('remove copies', removeCopies);
 
   it('copy setup for some services', async () => {
-    const serviceNames = ['back-a', 'front-a'];
-    const { stdout, stderr } = await execFile(copyProjectSetup, serviceNames, {
-      cwd: resolve(__dirname, '..', projectDir),
-      env: { ...process.env, COMPOSE_FILE: 'dc.01.yml' }
-    });
-    if (stderr) {
-      console.error('  - stdout:', stdout);
-      throw new Error(stderr);
-    }
-    // console.error('  - stdout:', stdout);
-
-    const configContent = await readFile(resolve(projectDir, 'setup/config.js'));
+    const services = ['back-a', 'front-a'];
+    await copyProjectSetup(services);
     await asyncMap(readDir(imagesDir), async (file) => {
       const imageDir = resolve(imagesDir, file);
       assert.isTrue(await isDirectory(imageDir));
       const setupDir = resolve(imageDir, '__project_setup__');
-      if (serviceNames.includes(file)) {
+      if (services.includes(file)) {
         assert.isTrue(await isDirectory(setupDir));
         const configFile = resolve(setupDir, 'config.js');
         const copyContent = await readFile(configFile);

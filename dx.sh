@@ -294,14 +294,14 @@ test_services () {
 
   if [ -z "${SERVICE}" ]
   then
-    local SERVICES="$(${JS_DIR}/getServiceNames.js --composefile dc.prod.yml --testable)"
+    local SERVICES="$(${JS_DIR}/getServiceNames.js --testable)"
     #echo "Test all: $(${JS_DIR}/getServiceNames.js --composefile dc.prod.yml --testable)"
     IFS=' ' read -r -a SERVICES <<< $SERVICES
     for I_ALL in ${!SERVICES[@]}
     do test_service 0 ${SERVICES[I_ALL]}
     done
   else
-    test_service ${WATCH} ${SERVICE}
+    test_service ${WATCH} "test-${SERVICE}"
   fi
 }
 
@@ -323,7 +323,7 @@ test_service () {
   }
   trap up_on_sigint SIGINT
 
-  printf "\nTesting '${SERVICE}' using ${SERVICES}:\n"
+  printf "\nTesting '${SERVICE}' using '${SERVICES}':\n"
   docker-compose up -d ${SERVICES}
   docker logs --follow --since 1s ${CONTAINER}
   STATUS=$(docker wait ${CONTAINER})
@@ -526,21 +526,21 @@ PROJECT_NAME=$(node -p -e "require('./package.json').name")
 PROJECT_VERSION=$(node -p -e "require('./package.json').version")
 
 USAGE_LINE="[dx] Usage:
-  $ dx build [service...]          # Build all/the given services in production mode.
-  $ dx build --dev [service...]    # Build all/the given services in development mode.
-  $ dx build --test                # Build all services in test mode.
-  $ dx clean                       # Remove all images, containers, etc.
-  $ dx clean --test                # Remove all test images, test containers, etc.
-  $ dx down                        # Stops containers and removes containers, networks, volumes and images created by up.
-  $ dx help                        # prints this info.
-  $ dx inspect service             # Inspect a service.
-  $ dx logs [service...]           # Print the logs for all/the given services.
-  $ dx outdated                    # Lists available updates for project dependencies.
-  $ dx restart [service...]        # Restart all/the given services.
-  $ dx stop [service...]           # Stop all/the given services.
-  $ dx test [[--watch] service]    # Test all services or the given service (in watch mode).
-  $ dx up [service...]             # Up all/the given services.
-  $ dx watch service               # Run a service in watch mode (when built in dev mode).
+  $ ./dx build [<service>...]        # Build all/the given services in production mode.
+  $ ./dx build --dev [<service>...]  # Build all/the given services in development mode.
+  $ ./dx build --test                # Build all services in test mode.
+  $ ./dx clean                       # Remove all images, containers, etc.
+  $ ./dx clean --test                # Remove all test images, test containers, etc.
+  $ ./dx down                        # Stops containers and removes containers, networks, volumes and images created by up.
+  $ ./dx help                        # prints this info.
+  $ ./dx inspect <service>           # Inspect a service.
+  $ ./dx logs [<service>...]         # Print the logs for all/the given services.
+  $ ./dx outdated                    # Lists available updates for project dependencies.
+  $ ./dx restart [<service>...]      # Restart all/the given services.
+  $ ./dx stop [<service>...]         # Stop all/the given services.
+  $ ./dx test [--watch <service>]    # Test all services or the given service (in watch mode).
+  $ ./dx up [<service>...]           # Up all/the given services.
+  $ ./dx watch <service>             # Run a service in watch mode (when built in dev mode).
 "
 
 ACTION=${1:-}

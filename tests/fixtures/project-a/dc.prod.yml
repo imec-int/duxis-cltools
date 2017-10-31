@@ -1,5 +1,11 @@
 version: '2'
 
+networks:
+  network-a:
+    driver: bridge
+  network-b:
+    driver: bridge
+
 services:
   back-a:
     build:
@@ -16,5 +22,8 @@ services:
   front-b:
     build:
       context: ./images/front-b
+  store-a:
+    build:
+      context: ./images/store-a
   ext-a:
     image: postgres:9-alpine
