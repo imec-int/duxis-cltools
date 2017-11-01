@@ -1,5 +1,10 @@
 # duxis-cltools - Changelog
 
+## v0.6.1
+
+- Bugfix in experimental _build-hook_ support.
+
+
 ## v0.6.0
 
 - Add experimental _build-hook_ support.
