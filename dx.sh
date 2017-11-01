@@ -56,6 +56,10 @@ build () {
   printf "\nCreating Dockerfiles for v${PROJECT_VERSION} in ${DX_ENV} mode:\n"
   find ./images/ -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
+  if [ "${DX_BUILD_HOOK}" ]
+  then "$(${DX_BUILD_HOOK})"
+  fi
+
   if [ -z "${SERVICES}" ]
   then
     printf "\nBuilding ${PROJECT_NAME} ${PROJECT_VERSION} in ${DX_ENV} mode:\n"
