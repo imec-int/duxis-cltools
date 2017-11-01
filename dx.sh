@@ -57,7 +57,7 @@ build () {
   find ./images/ -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
   if [ "${DX_BUILD_HOOK}" ]
-  then "$(${DX_BUILD_HOOK})"
+  then "${DX_BUILD_HOOK}"
   fi
 
   if [ -z "${SERVICES}" ]
