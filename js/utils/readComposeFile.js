@@ -23,9 +23,11 @@ module.exports = async (path, { enableExtends = true, includeXFields = false } =
   if (enableExtends) {
     const cache = {};
     composeFile = await _readComposeFileRec(path, cache);
-    await asyncForEach(Object.keys(composeFile.services), async (serviceName) => {
-      composeFile.services[serviceName] = await _getExtendedService(path, serviceName, cache);
-    });
+    if (composeFile.services) {
+      await asyncForEach(Object.keys(composeFile.services), async (serviceName) => {
+        composeFile.services[serviceName] = await _getExtendedService(path, serviceName, cache);
+      });
+    }
   }
   else {
     composeFile = await readYaml(path);

@@ -1,5 +1,10 @@
 # duxis-cltools - Changelog
 
+## v0.6.3
+
+- Do not fail when compose file has no services.
+
+
 ## v0.6.2
 
 - Bugfix in experimental _build-hook_ support.

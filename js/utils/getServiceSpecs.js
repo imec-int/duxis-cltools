@@ -18,17 +18,19 @@ const { asyncForEach, hasDuxisManifest, readDuxisManifest } = require('./utils')
 module.exports = async (path = process.env.COMPOSE_FILE) => {
   const composeFile = await readComposeFile(path, { includeXFields: true });
   const services = {};
-  await asyncForEach(Object.keys(composeFile.services), async (serviceName) => {
-    const service = services[serviceName] = composeFile.services[serviceName];
+  if (composeFile.services) {
+    await asyncForEach(Object.keys(composeFile.services), async (serviceName) => {
+      const service = services[serviceName] = composeFile.services[serviceName];
 
-    // Add manifest when provided:
-    if (service.build && service.build.context) {
-      const imagePath = resolve(dirname(path), service.build.context);
-      if (await hasDuxisManifest(imagePath)) {
-        service.manifest = await readDuxisManifest(imagePath);
+      // Add manifest when provided:
+      if (service.build && service.build.context) {
+        const imagePath = resolve(dirname(path), service.build.context);
+        if (await hasDuxisManifest(imagePath)) {
+          service.manifest = await readDuxisManifest(imagePath);
+        }
       }
-    }
-  });
+    });
+  }
   // console.log('- services:', services);
   return services;
 };
