@@ -1,6 +1,6 @@
 {
   "name": "@imec-apt/duxis-cltools",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Duxis project command line development tools.",
   "bin": {
     "dx": "./dx.sh"
@@ -17,7 +17,7 @@
     "fs-extra": "4.0.2",
     "js-yaml": "3.10.0",
     "lodash": "4.17.4",
-    "npm-check": "5.5.0"
+    "npm-check": "5.5.1"
   },
   "devDependencies": {
     "chai": "4.1.2",
