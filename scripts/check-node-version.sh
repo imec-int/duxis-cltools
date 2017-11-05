@@ -28,8 +28,8 @@ function semver_lt() {
 
 # Check Node.js version
 #
-NODE_VERSION="8.6.0"
+NODE_VERSION="8.9.0"
 if semver_lt $(node --version) ${NODE_VERSION}
 then
-  echo -e "${RED}Please upgrade Node.js to v${NODE_VERSION}.${NC}"
+  echo -e "${RED}Please upgrade Node.js to v${NODE_VERSION} or higher.${NC}"
 fi
