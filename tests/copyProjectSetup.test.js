@@ -42,12 +42,13 @@ describe('copyProjectSetup', function () {
     const services = ['back-a', 'back-b', 'back-c', 'front-a', 'front-b'];
     await asyncForEach(services, async (file) => {
       const imageDir = resolve(imagesDir, file);
-      assert.isTrue(await isDirectory(imageDir));
-      const setupDir = resolve(imageDir, '__project_setup__');
-      assert.isTrue(await isDirectory(setupDir));
-      const configFile = resolve(setupDir, 'config.js');
-      const copyContent = await readFile(configFile);
-      assert.deepEqual(copyContent, configContent);
+      if (await isDirectory(imageDir)) {
+        const setupDir = resolve(imageDir, '__project_setup__');
+        assert.isTrue(await isDirectory(setupDir));
+        const configFile = resolve(setupDir, 'config.js');
+        const copyContent = await readFile(configFile);
+        assert.deepEqual(copyContent, configContent);
+      }
     });
   });
 
@@ -58,16 +59,17 @@ describe('copyProjectSetup', function () {
     await copyProjectSetup(services);
     await asyncMap(readDir(imagesDir), async (file) => {
       const imageDir = resolve(imagesDir, file);
-      assert.isTrue(await isDirectory(imageDir));
-      const setupDir = resolve(imageDir, '__project_setup__');
-      if (services.includes(file)) {
-        assert.isTrue(await isDirectory(setupDir));
-        const configFile = resolve(setupDir, 'config.js');
-        const copyContent = await readFile(configFile);
-        assert.deepEqual(copyContent, configContent);
-      }
-      else {
-        assert.isFalse(await exists(setupDir));
+      if (await isDirectory(imageDir)) {
+        const setupDir = resolve(imageDir, '__project_setup__');
+        if (services.includes(file)) {
+          assert.isTrue(await isDirectory(setupDir));
+          const configFile = resolve(setupDir, 'config.js');
+          const copyContent = await readFile(configFile);
+          assert.deepEqual(copyContent, configContent);
+        }
+        else {
+          assert.isFalse(await exists(setupDir));
+        }
       }
     });
   });

@@ -4,6 +4,7 @@
 
 - Fix bug: `./dx test --watch <service>` yields `No such service: test-test-<service>`.
 - Warn when using `./dx test --watch` without `<service>`.
+- Do not fail when fixture directories such as `images`, contains `.DS_Store` or other such files.
 
 
 ## v0.6.3
