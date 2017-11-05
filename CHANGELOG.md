@@ -3,6 +3,7 @@
 ## v0.6.4
 
 - Fix bug: `./dx test --watch <service>` yields `No such service: test-test-<service>`.
+- Warn when using `./dx test --watch` without `<service>`.
 
 
 ## v0.6.3

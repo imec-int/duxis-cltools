@@ -289,8 +289,13 @@ test_services () {
   local WATCH=0
   if [ "${1}" == "--watch" ]
   then
-    SERVICE="${2}"
     WATCH=1
+    SERVICE="${2}"
+    if [ -z "${SERVICE}" ]
+    then
+      printerr "Please specify which service you want to watch."
+      exit -1
+    fi
   fi
 
   set_env test
