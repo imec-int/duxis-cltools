@@ -305,7 +305,7 @@ test_services () {
     do test_service 0 ${SERVICES[I_ALL]}
     done
   else
-    test_service ${WATCH} "test-${SERVICE}"
+    test_service ${WATCH} "${SERVICE}"
   fi
 }
 

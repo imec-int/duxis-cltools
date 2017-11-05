@@ -1,5 +1,10 @@
 # duxis-cltools - Changelog
 
+## v0.6.4
+
+- Fix bug: `./dx test --watch <service>` yields `No such service: test-test-<service>`.
+
+
 ## v0.6.3
 
 - Do not fail when compose file has no services.
