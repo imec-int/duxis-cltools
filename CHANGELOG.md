@@ -1,5 +1,10 @@
 # duxis-cltools - Changelog
 
+## v0.6.5
+
+- Improve Node.js version check.
+
+
 ## v0.6.4
 
 - Upgrade to Node.js 8.9.0 LTS.
