@@ -6,9 +6,9 @@
     "dx": "./dx.sh"
   },
   "scripts": {
-    "install": "run-s install:check-node-version install:completion",
+    "install": "run-s install:checkNodeVersion install:completion",
     "install:completion": "scripts/install-completion.sh",
-    "install:check-node-version": "scripts/checkNodeVersion.js",
+    "install:checkNodeVersion": "scripts/checkNodeVersion.js",
     "test": "mocha --bail --recursive tests",
     "test:watch": "nodemon"
   },
@@ -28,7 +28,7 @@
     "semver": "5.4.1"
   },
   "engines": {
-    "node": ">=9.9.0"
+    "node": ">=8.9.0"
   },
   "repository": {
     "type": "git",
