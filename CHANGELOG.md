@@ -4,7 +4,6 @@
 
 - Improve Node.js version check.
 - Fix `/usr/bin/env: node --harmony: No such file or directory` error on Linux which does not support multiple arguments in shebangs.
-- Provide custom install script for Jenkins.
 
 
 ## v0.6.4
