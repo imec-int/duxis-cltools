@@ -382,7 +382,6 @@ up_services () {
   if [ -z "${SERVICES}" ]
   then
     printf "\nStart ${PROJECT_NAME} (${COMPOSE_PROJECT_NAME}) in ${DX_ENV} mode:\n"
-    docker-compose create
     if [ ${DX_ENV} == "dev" ] || [ ${DX_ENV} == "dxdev" ]
     then
       trap up_on_sigint SIGINT
@@ -393,7 +392,6 @@ up_services () {
     fi
   else
     printf "\nStart ${SERVICES[@]} (${COMPOSE_PROJECT_NAME}) in ${DX_ENV} mode:\n"
-    docker-compose create ${SERVICES[@]}
     if [ ${DX_ENV} == "dev" ] || [ ${DX_ENV} == "dxdev" ]
     then
       trap up_on_sigint SIGINT
