@@ -7,6 +7,7 @@ See also:
 - [Changelog](CHANGELOG.md)
 
 
+
 ## Using the _cltools_ in your Duxis Project
 
 Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis project:
@@ -15,9 +16,9 @@ Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis
 {
   "name": "my-duxis-project",
   "version": "0.1.0",
-  "dx_version": "0.23.0",
+  "dx_version": "1.7.0",
   "dependencies": {
-    "@imec-apt/duxis-cltools": "0.2.7"
+    "@imec-apt/duxis-cltools": "0.7.0"
   }
 }
 ```
@@ -122,6 +123,7 @@ Some commands can only be used on a single service:
 | `./dx test --watch foo` | Test the _foo_ service in _watch-mode_. |
 
 
+
 ## Duxis Project Requirements
 
 > This section is under construction...
@@ -137,7 +139,6 @@ The following files and directories are required (or optional) in a Duxis projec
 | `dc.prod.yml` | The [Docker Compose][] file that provides the production-specific configation. |
 | `dc.test.yml` | The [Docker Compose][] file that provides the test configation. |
 | ... | (TODO) |
-
 
 The following table shows the values for the `NODE_ENV` and `DX_ENV` environment variables for each of the standard Duxis project modes.
 

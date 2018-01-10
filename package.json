@@ -1,6 +1,6 @@
 {
   "name": "@imec-apt/duxis-cltools",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "description": "Duxis project command line development tools.",
   "bin": {
     "dx": "./dx.sh"
@@ -22,13 +22,13 @@
   "devDependencies": {
     "chai": "4.1.2",
     "chalk": "2.3.0",
-    "mocha": "4.0.1",
-    "nodemon": "1.13.3",
+    "mocha": "4.1.0",
+    "nodemon": "1.14.10",
     "npm-run-all": "4.1.2",
     "semver": "5.4.1"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8.9.4"
   },
   "repository": {
     "type": "git",

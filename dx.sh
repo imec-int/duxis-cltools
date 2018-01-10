@@ -224,9 +224,6 @@ inspect_service () {
   # CLI param 1: The name of the service to inspect.
   local SERVICE=$1
 
-  echo "SERVICE: ${SERVICE}"
-  #"$(container_name ${NAME})"
-
   if [ -z "${SERVICE}" ]
   then
     echo "Error: You need to provide a service name to inspect."

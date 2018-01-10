@@ -6,7 +6,16 @@ const { resolve } = require('path');
 
 const program = require('commander');
 
-const { asyncForIn, copy, getServiceSpecs, rmrf } = require('./utils');
+const {
+  asyncForEach,
+  asyncForIn,
+  copy,
+  getServiceSpecs,
+  hasDuxisManifest,
+  readDir,
+  readDuxisManifest,
+  rmrf
+} = require('./utils');
 
 // -- Constants --------------- --- --  -
 
@@ -25,7 +34,6 @@ const COMPOSE_FILE = process.env.COMPOSE_FILE || PROD_COMPOSE_FILE;
  * @returns {Promise.<string[]>}
  */
 async function copyProjectSetup({ args: serviceNames, clean, composefile }) {
-  // console.log('>> copyProjectSetup - ', { clean, composefile, serviceNames });
   const services = await getServiceSpecs(resolve(composefile));
   if (clean) {
     await asyncForIn(services, async (serviceSpec) => {
@@ -38,11 +46,7 @@ async function copyProjectSetup({ args: serviceNames, clean, composefile }) {
     await asyncForIn(serviceNames, async (serviceName) => {
       const serviceSpec = services[serviceName];
       if (serviceSpec) {
-        if (serviceSpec.build && serviceSpec.build.context) {
-          await copy('setup', resolve(serviceSpec.build.context, '__project_setup__'), {
-            preserveTimestamps: true
-          }); //.catch(() => null);
-        }
+        await copySetup(serviceSpec);
       }
       else {
         throw new Error(`There is no '${serviceName}' service.`);
@@ -51,14 +55,28 @@ async function copyProjectSetup({ args: serviceNames, clean, composefile }) {
   }
   else {
     await asyncForIn(services, async (serviceSpec) => {
-      if (serviceSpec.build && serviceSpec.build.context) {
-        await copy('setup', resolve(serviceSpec.build.context, '__project_setup__'), {
-          preserveTimestamps: true
-        }); //.catch(() => null);
-      }
+      await copySetup(serviceSpec);
     });
   }
 }
+
+const copySetup = async (serviceSpec) => {
+  if (serviceSpec.build && serviceSpec.build.context) {
+    if (await hasDuxisManifest(serviceSpec.build.context)) {
+      const manifest = await readDuxisManifest(serviceSpec.build.context);
+      if (manifest.cargoApp || manifest.cargoFrontend) {
+        const targetPath = resolve(serviceSpec.build.context, '__project_setup__');
+        await asyncForEach(await readDir('setup'), async (fileName) => {
+          if (!fileName.includes('local')) {
+            await copy(resolve('setup', fileName), resolve(targetPath, fileName), {
+              preserveTimestamps: true
+            }); //.catch(() => null);
+          }
+        });
+      }
+    }
+  }
+};
 
 // -- CLI --------------- --- --  -
 

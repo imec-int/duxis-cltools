@@ -26,6 +26,10 @@ describe('copyProjectSetup', function () {
       console.error('  - stdout:', stdout);
       throw new Error(stderr);
     }
+    else if (stdout) {
+      // print whatever was logged in copyProjectSetup:
+      console.log(stdout);
+    }
     return stdout;
   };
 
@@ -37,18 +41,35 @@ describe('copyProjectSetup', function () {
     });
   };
 
+  const checkSetupContent = async (imageDir) => {
+    assert.isTrue(await isDirectory(imageDir));
+    const setupDir = resolve(imageDir, '__project_setup__');
+    assert.isTrue(await isDirectory(setupDir));
+    let file;
+
+    // check: config.js
+    file = resolve(setupDir, 'config.js');
+    assert.isTrue(await exists(file));
+    const copyContent = await readFile(file);
+    assert.deepEqual(copyContent, configContent);
+
+    // check: config.local.js
+    file = resolve(setupDir, 'config.local.js');
+    assert.isFalse(await exists(file));
+  };
+
+  it('remove copies', removeCopies);
+
   it('copy setup', async () => {
     await copyProjectSetup();
-    const services = ['back-a', 'back-b', 'back-c', 'front-a', 'front-b'];
-    await asyncForEach(services, async (file) => {
-      const imageDir = resolve(imagesDir, file);
-      if (await isDirectory(imageDir)) {
-        const setupDir = resolve(imageDir, '__project_setup__');
-        assert.isTrue(await isDirectory(setupDir));
-        const configFile = resolve(setupDir, 'config.js');
-        const copyContent = await readFile(configFile);
-        assert.deepEqual(copyContent, configContent);
-      }
+    const dxServices = ['back-a', 'back-b', 'back-c', 'front-a', 'front-b'];
+    const otherServices = ['store-a'];
+    await asyncForEach(dxServices, async (serviceName) => {
+      await checkSetupContent(resolve(imagesDir, serviceName));
+    });
+    await asyncForEach(otherServices, async (serviceName) => {
+      const setupDir = resolve(imagesDir, serviceName, '__project_setup__');
+      assert.isFalse(await exists(setupDir));
     });
   });
 
@@ -57,19 +78,13 @@ describe('copyProjectSetup', function () {
   it('copy setup for some services', async () => {
     const services = ['back-a', 'front-a'];
     await copyProjectSetup(services);
-    await asyncMap(readDir(imagesDir), async (file) => {
-      const imageDir = resolve(imagesDir, file);
-      if (await isDirectory(imageDir)) {
-        const setupDir = resolve(imageDir, '__project_setup__');
-        if (services.includes(file)) {
-          assert.isTrue(await isDirectory(setupDir));
-          const configFile = resolve(setupDir, 'config.js');
-          const copyContent = await readFile(configFile);
-          assert.deepEqual(copyContent, configContent);
-        }
-        else {
-          assert.isFalse(await exists(setupDir));
-        }
+    await asyncMap(readDir(imagesDir), async (fileName) => {
+      if (services.includes(fileName)) {
+        await checkSetupContent(resolve(imagesDir, fileName));
+      }
+      else {
+        const setupDir = resolve(imagesDir, fileName, '__project_setup__');
+        assert.isFalse(await exists(setupDir));
       }
     });
   });
