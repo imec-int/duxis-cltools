@@ -1,5 +1,10 @@
 # duxis-cltools - Changelog
 
+## 0.7.1
+
+- Upgrade dependencies.
+
+
 ## 0.7.0
 
 - Do not include `*.local.*` files in setup directory in built images.
