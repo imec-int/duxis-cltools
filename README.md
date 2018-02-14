@@ -16,9 +16,9 @@ Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis
 {
   "name": "my-duxis-project",
   "version": "0.1.0",
-  "dx_version": "1.7.0",
+  "dx_version": "1.7.2",
   "dependencies": {
-    "@imec-apt/duxis-cltools": "0.7.0"
+    "@imec-apt/duxis-cltools": "0.7.1"
   }
 }
 ```
@@ -84,6 +84,16 @@ Cd to your duxis project, and link the package:
 npm link @imec-apt/duxis-cltools
 ```
 
+
+When done, cd into the duxis-cltools project directory and unlink the package:
+```bash
+npm unlink
+```
+
+Then cd to your duxis project, and unlink the package:
+```bash
+npm unlink @imec-apt/duxis-cltools
+```
 
 
 ## Manual
