@@ -2,6 +2,7 @@
 
 ## 0.7.1
 
+- Bugfix - Outdated Node.js warning is not shown.
 - Upgrade dependencies.
 
 
