@@ -433,8 +433,8 @@ watch_service () {
     printerr "The '${SERVICE}' service is not watchable."
     exit 4
   elif [ ${WATCHABLE} == 1 ]
-  then export WATCH_SERVICE=true
-  else export WATCH_FRONTEND=true
+  then export WATCH_SERVICE=1
+  else export WATCH_FRONTEND=1
   fi
 
   stop_services ${SERVICE}

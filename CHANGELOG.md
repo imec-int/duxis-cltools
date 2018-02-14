@@ -2,6 +2,7 @@
 
 ## 0.7.1
 
+- Bugfix -  `./dx watch` command doesn't work properly (DUX-135).
 - Bugfix - Outdated Node.js warning is not shown.
 - Upgrade dependencies.
 
