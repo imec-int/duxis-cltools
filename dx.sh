@@ -129,7 +129,7 @@ build_docker_file () {
   local TARGET="$(dirname ${SOURCE})/Dockerfile"
   if [ ${DX_ENV} == dxdev ]
   then PREFIX=""
-  else PREFIX="hub.duxis.io\/"
+  else PREFIX=$(sed 's/\//\\\//' <<< $DX_HUB)
   fi
   sed -E "s/FROM (cargo|dxf|duxis)-(.*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/" ${SOURCE} > ${TARGET}
   echo "Wrote ${TARGET}"
@@ -453,7 +453,10 @@ current_build_env () {
 
 set_env () {
   DX_ENV=${1:-prod}
-  DX_HUB="hub.duxis.io/"  # the hub prefix for images
+  if [ -z "${DX_HUB}" ]
+  then
+    DX_HUB="hub.duxis.io/" # the hub prefix for images; provide a fallback
+  fi
   COMPOSE_FILE="dc.${DX_ENV}.yml"
   case "${DX_ENV}" in
     prod)
