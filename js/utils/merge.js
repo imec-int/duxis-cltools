@@ -2,12 +2,7 @@
 
 /* eslint-disable import/no-commonjs */
 
-/**
- * TODO: use merge from dxf-universal package
- *
- * @author Wouter Van den Broeck for imec.be [wouter.vandenbroeck@imec.be]
- * @copyright 2016, imec
- */
+// TODO: use merge from dxf-universal package
 
 const { isFunction, isMap, isPlainObject, isSet } = require('lodash');
 

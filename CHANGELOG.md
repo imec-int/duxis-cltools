@@ -1,5 +1,17 @@
 # duxis-cltools - Changelog
 
+## 1.0.0
+- Add support for `FROM node` declarations in _Dockerfile.template_ files with insertion of Node.js
+  version declared as `nodeVersion` property in the project _package.json_ file.
+- No longer expect a trailing slash for _DX\_HUB_ values.
+- Use `imec` as default value for _DX\_HUB_. This new prefix should be used for Duxis Foundation
+  v1.14.0 and up. For services that reference a prefixed Duxis Foundation image in the _dx.base.yml_
+  Docker Composer file, e.g. `image: ${DX_HUB}/duxis-auth-store:${DX_VERSION}`, you should override
+  this reference with an un-prefixed one -e.g. `image: duxis-auth-store:${DX_VERSION}`- in the
+  _dc.dxdev.yml_ file.
+- Upgrade to Node.js 8.11.3 LTS.
+
+
 ## 0.7.2
 - Use `DX_HUB` value from project’s .env file when possible.
 - Upgrade to Node.js 8.11.0 LTS.

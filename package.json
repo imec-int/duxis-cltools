@@ -1,6 +1,6 @@
 {
   "name": "@imec-apt/duxis-cltools",
-  "version": "0.7.2",
+  "version": "1.0.0",
   "description": "Duxis project command line development tools.",
   "bin": {
     "dx": "./dx.sh"
@@ -28,7 +28,7 @@
     "semver": "5.5.0"
   },
   "engines": {
-    "node": ">=8.11.0"
+    "node": ">=8.11.3"
   },
   "repository": {
     "type": "git",

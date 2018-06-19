@@ -3,16 +3,17 @@
 # Avoid 'unresolved variable' warnings in Webstorm:
 export COMPOSE_FILE
 export COMPOSE_PROJECT_NAME
+export DX_BUILD_ENV_FILE
+export DX_BUILD_HOOK
 export DX_ENV
 export DX_HOST
 export DX_HUB
-export DX_VERSION
 export DX_VOLUMES
+export DXF_IMAGES
+export EXT_IMAGES
 export FE_PROTOCOL
 export LOG_ENVIRONMENT
 export NODE_ENV
-export PROJECT_NAME
-export PROJECT_VERSION
 
 # Get the directory of this script:
 SOURCE="${BASH_SOURCE[0]}"
@@ -103,8 +104,8 @@ pull_dxf_images () {
     IFS=' ' read -r -a IMAGES <<< "$DXF_IMAGES"
     for IMAGE in "${IMAGES[@]}"
     do
-      printf "\nPulling ${DX_HUB}${IMAGE}:${DX_VERSION}\n"
-      docker pull "${DX_HUB}${IMAGE}:${DX_VERSION}"
+      printf "\nPulling ${DX_HUB}/${IMAGE}:${DX_VERSION}\n"
+      docker pull "${DX_HUB}/${IMAGE}:${DX_VERSION}"
     done
     printf "\n"
   fi
@@ -129,9 +130,9 @@ build_docker_file () {
   local TARGET="$(dirname ${SOURCE})/Dockerfile"
   if [ ${DX_ENV} == dxdev ]
   then PREFIX=""
-  else PREFIX=$(sed 's/\//\\\//' <<< $DX_HUB)
+  else PREFIX="${DX_HUB}/"
   fi
-  sed -E "s/FROM (cargo|dxf|duxis)-(.*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/" ${SOURCE} > ${TARGET}
+  sed -E "s/^FROM (cargo|dxf|duxis)-([a-zA-Z0-9_-]*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/; s/^FROM node/FROM node:${NODE_VERSION}/" ${SOURCE} > ${TARGET}
   echo "Wrote ${TARGET}"
 }
 export -f build_docker_file
@@ -455,7 +456,7 @@ set_env () {
   DX_ENV=${1:-prod}
   if [ -z "${DX_HUB}" ]
   then
-    DX_HUB="hub.duxis.io/" # the hub prefix for images; provide a fallback
+    DX_HUB="imec" # the default Docker hub prefix
   fi
   COMPOSE_FILE="dc.${DX_ENV}.yml"
   case "${DX_ENV}" in
@@ -523,14 +524,24 @@ else
 fi
 set +o allexport
 
+# Check for deprecated DX_HUB values:
+if [ "${DX_HUB}" == "hub.duxis.io/" ] || [ "${DX_HUB}" == "imec/" ]
+then
+  printerr "Please remove the trailing slash from the DX_HUB variable in your .env file."
+  exit 1
+fi
+
+# The Duxis Foundation version specified in `package.json`:
+export NODE_VERSION=$(node -p -e "require('./package.json').nodeVersion")
+
 # The Duxis Foundation version as specified in `package.json`:
-DX_VERSION=$(node -p -e "require('./package.json').dx_version")
+export DX_VERSION=$(node -p -e "require('./package.json').dx_version")
 
 # The project name as specified in `package.json`:
-PROJECT_NAME=$(node -p -e "require('./package.json').name")
+export PROJECT_NAME=$(node -p -e "require('./package.json').name")
 
 # The project version as specified in `package.json`:
-PROJECT_VERSION=$(node -p -e "require('./package.json').version")
+export PROJECT_VERSION=$(node -p -e "require('./package.json').version")
 
 USAGE_LINE="[dx] Usage:
   $ ./dx build [<service>...]        # Build all/the given services in production mode.
