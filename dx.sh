@@ -130,7 +130,7 @@ build_docker_file () {
   local TARGET="$(dirname ${SOURCE})/Dockerfile"
   if [ ${DX_ENV} == dxdev ]
   then PREFIX=""
-  else PREFIX="${DX_HUB}/"
+  else PREFIX="${DX_HUB}\/"
   fi
   sed -E "s/^FROM (cargo|dxf|duxis)-([a-zA-Z0-9_-]*)/FROM ${PREFIX}\1-\2:${DX_VERSION}/; s/^FROM node/FROM node:${NODE_VERSION}/" ${SOURCE} > ${TARGET}
   echo "Wrote ${TARGET}"
