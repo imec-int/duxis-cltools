@@ -1,5 +1,13 @@
 # duxis-cltools - Changelog
 
+## 1.0.2
+- Assert that required environment variables are provided.
+
+
+## 1.0.1
+- Bug fix.
+
+
 ## 1.0.0
 - Add support for `FROM node` declarations in _Dockerfile.template_ files with insertion of Node.js
   version declared as `nodeVersion` property in the project _package.json_ file.

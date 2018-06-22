@@ -27,6 +27,27 @@ JS_DIR="${DIR}/js"
 
 # --------------------------------------------------------------------------------------------------
 
+REQUIRED_VARS=(
+  "DX_HOST"
+  "DX_HUB"
+  "DX_VOLUMES"
+  "FE_PROTOCOL"
+)
+
+# Assert that required vars are specified:
+assertRequiredVars () {
+  for VAR in "${REQUIRED_VARS[@]}"
+  do
+    if [ -z "${!VAR}" ]
+    then
+      printerr "Please provide the required variable ${VAR} in your .env file."
+      exit 1
+    fi
+  done
+}
+
+# --------------------------------------------------------------------------------------------------
+
 build () {
   local SERVICES
   case "${1}" in
@@ -523,6 +544,8 @@ else
   exit 1
 fi
 set +o allexport
+
+assertRequiredVars
 
 # Check for deprecated DX_HUB values:
 if [ "${DX_HUB}" == "hub.duxis.io/" ] || [ "${DX_HUB}" == "imec/" ]
