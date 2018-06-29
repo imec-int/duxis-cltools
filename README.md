@@ -71,29 +71,21 @@ npm run test:watch
 
 ## Local Development
 
-To test local uncommitted changes in the cltools, use the `npm link` features as follows:
+To test your local version of cltools in a Duxis project, cd into the project's root directory and
+execute:
 
-Cd into the duxis-cltools project directory, install and prepare the package link:
 ```bash
+rm -f dx
+ln -s <path-to-duxis-cltools>/dx.sh dx
+```
+
+To restore the project, execute:
+
+```bash
+rm -f dx
 npm install
-npm link
 ```
 
-Cd to your duxis project, and link the package:
-```bash
-npm link @imec-apt/duxis-cltools
-```
-
-
-When done, cd into the duxis-cltools project directory and unlink the package:
-```bash
-npm unlink
-```
-
-Then cd to your duxis project, and unlink the package:
-```bash
-npm unlink @imec-apt/duxis-cltools
-```
 
 
 ## Manual
