@@ -255,7 +255,7 @@ inspect_service () {
   docker exec -ti "$(container_name ${SERVICE})" /bin/bash
 }
 
-# --------------------------------------------------------------------------------------------------
+# -- logs --------------- --- --  -
 
 logs () {
   if [ -e "$(current_build_env)" ]
@@ -267,7 +267,14 @@ logs () {
   docker-compose logs --follow "${@}"
 }
 
-# --------------------------------------------------------------------------------------------------
+# -- outdated --------------- --- --  -
+
+outdated () {
+  npm outdated
+  ${JS_DIR}/outdated.js .
+}
+
+# -- restart --------------- --- --  -
 
 restart_services () {
   if [ -e "$(current_build_env)" ]
@@ -599,7 +606,7 @@ case ${ACTION} in
   help)         echo "${USAGE_LINE}";;
   inspect)      inspect_service ${@:2};;
   logs)         logs ${@:2};;
-  outdated)     ${JS_DIR}/outdated.js .;;
+  outdated)     outdated;;
   restart)      restart_services ${@:2};;
   stop)         stop_services ${@:2};;
   test)         test_services ${@:2};;

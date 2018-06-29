@@ -1,5 +1,9 @@
 # duxis-cltools - Changelog
 
+## 1.1.0
+- Also run `npm outdated` when calling `./dx outdated`. 
+
+
 ## 1.0.2
 - Assert that required environment variables are provided.
 
