@@ -54,19 +54,33 @@ build () {
     --dev)
       set_env dev
       SERVICES="${@:2}"
+      build_images
       ;;
     --dxdev)
       set_env dxdev
       SERVICES="${@:2}"
+      build_images
       ;;
     --test)
+      set_env prod
+      SERVICES="${@:2}"
+      build_images
       build_test_services
-      exit
+      ;;
+    --dxtest)
+      set_env dxdev
+      SERVICES="${@:2}"
+      build_images
+      build_test_services
       ;;
     *)
       set_env prod
       SERVICES="${@}"
+      build_images
   esac
+}
+
+build_images () {
   log_environment
 
   if [ "${SERVICES}" ] && [ "$(current_build_env)" != "${DX_ENV}" ]
@@ -133,13 +147,10 @@ pull_dxf_images () {
 }
 
 build_test_services () {
-  # Build standard services in production mode:
-  build
-
   printf "\nBuild test images:\n"
   set_env test
-  node ${JS_DIR}/copyProjectSetup.js
-  docker-compose build --pull
+  node ${JS_DIR}/copyProjectSetup.js --composefile dc.test.yml
+  docker-compose build
   node ${JS_DIR}/copyProjectSetup.js --clean
 
   # Write the current environment to the `.build-env` file:
@@ -542,7 +553,7 @@ printerr () {
 
 # --------------------------------------------------------------------------------------------------
 
-# Load .env file:
+# Load the .env file:
 set -o allexport
 if [ -f .env ]
 then source ./.env
@@ -552,6 +563,7 @@ else
 fi
 set +o allexport
 
+# Assert that all required environment variables are set:
 assertRequiredVars
 
 # Check for deprecated DX_HUB values:
@@ -561,22 +573,24 @@ then
   exit 1
 fi
 
-# The Duxis Foundation version specified in `package.json`:
+# Export the Duxis Foundation version specified in `package.json`:
 export NODE_VERSION=$(node -p -e "require('./package.json').nodeVersion")
 
-# The Duxis Foundation version as specified in `package.json`:
+# Export the Duxis Foundation version as specified in `package.json`:
 export DX_VERSION=$(node -p -e "require('./package.json').dx_version")
 
-# The project name as specified in `package.json`:
+# Export the project name as specified in `package.json`:
 export PROJECT_NAME=$(node -p -e "require('./package.json').name")
 
-# The project version as specified in `package.json`:
+# Export the project version as specified in `package.json`:
 export PROJECT_VERSION=$(node -p -e "require('./package.json').version")
 
 USAGE_LINE="[dx] Usage:
   $ ./dx build [<service>...]        # Build all/the given services in production mode.
   $ ./dx build --dev [<service>...]  # Build all/the given services in development mode.
   $ ./dx build --test                # Build all services in test mode.
+  $ ./dx build --dxdev               # Build all services in Duxis co-development mode.
+  $ ./dx build --dxtest              # Build all services in Duxis co-development test mode.
   $ ./dx clean                       # Remove all images, containers, etc.
   $ ./dx clean --test                # Remove all test images, test containers, etc.
   $ ./dx down                        # Stops containers and removes containers, networks, volumes and images created by up.
@@ -591,14 +605,17 @@ USAGE_LINE="[dx] Usage:
   $ ./dx watch <service>             # Run a service in watch mode (when built in dev mode).
 "
 
+# The first command-line argument is the action:
 ACTION=${1:-}
 
+# Print the instructions when no action is given:
 if [ -z "${ACTION}" ]
 then
   echo "${USAGE_LINE}"
   exit 1;
 fi
 
+# Call the appropriate action handler:
 case ${ACTION} in
   build)        build ${@:2};;
   clean)        clean ${@:2};;

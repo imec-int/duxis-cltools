@@ -1,5 +1,9 @@
 # duxis-cltools - Changelog
 
+## 1.2.0
+- feat: Add `build --dxtest` mode, which builds the test images using local base images.  
+
+
 ## 1.1.0
 - Also run `npm outdated` when calling `./dx outdated`. 
 

@@ -26,7 +26,7 @@ const COMPOSE_FILE = process.env.COMPOSE_FILE || PROD_COMPOSE_FILE;
 
 /**
  * Copies the project setup directory in each front image build context, such that it can be
- * included in the image (at build-time and be available when packing the frontend content).
+ * included in the image at build-time and be available when packing the frontend content.
  *
  * @param {string} [composeFile] - The name of the Compose file to use. Defaults to the value of the
  *   `COMPOSE_FILE` environment variable, or `dc.prod.yml`.
@@ -84,7 +84,7 @@ program
   .version('0.1.0')
   .usage('[options] <service ...>')
   .option('--clean', `Remove the temporary copies.`)
-  .option('--composefile [path]', `Specify the Compose file to use [${COMPOSE_FILE}].`, COMPOSE_FILE)
+  .option('--composefile [path]', `Specify the Compose file to use [default: ${COMPOSE_FILE}].`, COMPOSE_FILE)
   .parse(process.argv);
 
 copyProjectSetup(program)

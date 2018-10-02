@@ -96,28 +96,42 @@ To develop, test or deploy a Duxis project, you first need to build the project 
 You can build in one of the four following modes.
 The _DX\_ENV_ columns shows the value for the `DX_ENV` environment variable in 
 
-| Command | Mode | DX_ENV | Description |
-| ------- |:----:|:------:| ----------- |
-| `./dx build` | Production | `prod` | The default mode for deployment. |
-| `./dx build --test` | Test | `test` | To be used for running the tests. |
-| `./dx build --dev` | Development | `dev` | The standard development mode. |
-| `./dx build --dxdev` | Duxis-development | `dxdev` | To be used when co-developing Duxis Foundation. <sup>(1)</sup> |
+| Command | Mode | DX_ENV | NODE_ENV | Description |
+| ------- |:----:|:------:|:------:| ----------- |
+| `./dx build` | Production | `prod` | `production` | The default mode for deployment. |
+| `./dx build --dev` | Development | `dev` | `development`  | The standard development mode. |
+| `./dx build --dxdev` | Duxis-development | `dxdev` | `development`  | To be used when co-developing Duxis Foundation. <sup>(1)</sup> |
+| `./dx build --test` | Test | `test` (`prod`<sup>(2)</sub>) | `test` | To be used for running the tests. |
+| `./dx build --dxtest` | Test | `test` (`dxdev`<sup>(2)</sub>) | `test` | To be used for running the tests when co-developing Duxis Foundation. |
 
-<small><ol><li>Note that to use the _Duxis-development_ mode, the `DXF_PATH` environment variable in your `.env` file should be properly configured.</li></ol></small>
+<small><ol>
+  <li>Note that to use the _dxdev_ or _dxtest_ modes, the `DXF_PATH` environment variable in your `.env` file should be properly configured.</li>
+  <li>The build-time environment.</li>
+</ol></small>
+
+The following table shows the values for the `NODE_ENV` and `DX_ENV` environment variables for each of the standard Duxis project modes.
+
+| Mode | NODE_ENV | DX_ENV |
+| ---- |:--------:|:------:|
+| production | `production` | `prod` |
+| test/dxtest | `test` | `test` |
+| development | `development` | `dev` |
+| dxdev | `development` | `dxdev` |
+
 
 Once you've built in one of these modes, you can use the other commands, depending on the mode, as shown in the following table:
 
-| Command | prod | test | dev | dxdev | Description |
+| Command | prod | de/dxdev | test/dxtest | Description |
 | ------- |:---:|:---:|:---:|:---:| ----------- |
-| `./dx up` |X||X|X| Start the services. |
-| `./dx test` ||X||| Run the tests. |
-| `./dx inspect` |X||X|X| Inspect a service. |
-| `./dx logs` |X|||| Print the logs. |
-| `./dx stop` |X||X|X| Stop the services. |
-| `./dx down` |X||X|X| Stops containers and removes containers, networks, volumes and images created when running `./dx up` (or `./dx test`). |
-| `./dx restart` |X||X|X| Stop and restart the services. |
-| `./dx clean` |X|X|X|X| Remove all images, containers, etc. |
-| `./dx clean --test` ||X||| Remove only test images, test containers, test volumes, etc. |
+| `./dx up` |X|X|| Start the services. |
+| `./dx test` |||X| Run the tests. |
+| `./dx inspect` |X|X|| Inspect a service. |
+| `./dx logs` |X||| Print the logs. |
+| `./dx stop` |X|X|| Stop the services. |
+| `./dx down` |X|X|| Stops containers and removes containers, networks, volumes and images created when running `./dx up` (or `./dx test`). |
+| `./dx restart` |X|X|| Stop and restart the services. |
+| `./dx clean` |X|X|X| Remove all images, containers, etc. |
+| `./dx clean --test` |||X| Remove only test images, test containers, test volumes, etc. |
 
 You can also use certain commands on one (or several) services, as shown in the following examples:
 
@@ -152,21 +166,12 @@ The following files and directories are required (or optional) in a Duxis projec
 | Path | Purpose |
 |:---- |:------- |
 | `.env` | Provides default values for (most of) the environment variables. Some additional variables are set by the `dx` cli. |
-| `dc.base.yml` | Optional [Docker Compose][] file that typically provides the common configation, and is extended in the environment-specific compose files. |
-| `dc.dev.yml` | The [Docker Compose][] file that provides the development-specific configation. |
+| `dc.base.yml` | Optional [Docker Compose][] file that typically provides the common configuration, and is extended in the environment-specific compose files. |
+| `dc.dev.yml` | The [Docker Compose][] file that provides the development-specific configuration. |
 | `dc.dxdev.yml` | Optional [Docker Compose][] file that provides the extended Duxis-development configation. |
-| `dc.prod.yml` | The [Docker Compose][] file that provides the production-specific configation. |
-| `dc.test.yml` | The [Docker Compose][] file that provides the test configation. |
+| `dc.prod.yml` | The [Docker Compose][] file that provides the production-specific configuration. |
+| `dc.test.yml` | The [Docker Compose][] file that provides the test configuration. |
 | ... | (TODO) |
-
-The following table shows the values for the `NODE_ENV` and `DX_ENV` environment variables for each of the standard Duxis project modes.
-
-| Mode | NODE_ENV | DX_ENV |
-| ---- |:--------:|:------:|
-| Production | `prod` |
-| Test | `test` |
-| Development | `dev` |
-| Duxis-Development | `dxdev` |
 
 
 
