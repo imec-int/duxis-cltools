@@ -16,9 +16,9 @@ Add the _duxis-cltools_ as a dependency in the `package.json` file in your Duxis
 {
   "name": "my-duxis-project",
   "version": "0.1.0",
-  "dx_version": "1.7.2",
+  "dx_version": "1.27.4",
   "dependencies": {
-    "@imec-apt/duxis-cltools": "0.7.1"
+    "@imec-apt/duxis-cltools": "1.2.1"
   }
 }
 ```
@@ -94,7 +94,7 @@ The _duxis-cltools_ provides the command line utility `dx`, which facilitates th
 
 To develop, test or deploy a Duxis project, you first need to build the project with the `dx build` command.
 You can build in one of the four following modes.
-The _DX\_ENV_ columns shows the value for the `DX_ENV` environment variable in 
+The _DX\_ENV_ columns shows the value for the `DX_ENV` environment variable in
 
 | Command | Mode | DX_ENV | NODE_ENV | Description |
 | ------- |:----:|:------:|:------:| ----------- |
