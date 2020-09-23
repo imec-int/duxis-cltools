@@ -89,6 +89,12 @@ build_images () {
     exit 1
   fi
 
+  # The azure registry login doesn't last very long
+  if [ "${DX_HUB}" == "duxis.azurecr.io" ]
+  then
+    az acr login --name duxis
+  fi
+
   printf "\nCreating Dockerfiles for v${PROJECT_VERSION} in ${DX_ENV} mode:\n"
   find ./images/ -name "Dockerfile.template" -exec bash -c 'build_docker_file "$0"' {} \;
 
