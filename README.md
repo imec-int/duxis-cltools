@@ -59,12 +59,14 @@ Run the tests once:
 
 ```bash
 npm test
+yarn test
 ```
 
 Or run the tests in watch-mode:
 
 ```bash
 npm run test:watch
+yarn test:watch
 ```
 
 
@@ -84,6 +86,7 @@ To restore the project, execute:
 ```bash
 rm -f dx
 npm install
+yarn install
 ```
 
 
