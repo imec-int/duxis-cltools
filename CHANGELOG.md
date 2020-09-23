@@ -2,6 +2,7 @@
 
 ## 1.3.0
 - feat: Call `az acr login` for azure registry containers
+- fix: build test with test node env
 
 ## 1.2.0
 - feat: Add `build --dxtest` mode, which builds the test images using local base images.

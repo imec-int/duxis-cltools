@@ -62,7 +62,7 @@ build () {
       build_images
       ;;
     --test)
-      set_env prod
+      set_env test
       SERVICES="${@:2}"
       build_images
       build_test_services
