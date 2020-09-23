@@ -1,7 +1,7 @@
 # duxis-cltools - Changelog
 
-## 1.2.2
-- fix: Call `az acr login` for azure registry containers
+## 1.3.0
+- feat: Call `az acr login` for azure registry containers
 
 ## 1.2.0
 - feat: Add `build --dxtest` mode, which builds the test images using local base images.
